@@ -89,7 +89,6 @@ async function saveCompetitorIntel({ competitor, category, summary, sourceURL })
     Summary: summary,
     SourceURL: sourceURL,
     DateFetched: new Date().toISOString().split('T')[0],
-    Status: 'active',
   };
 
   if (existing[0]) {
@@ -100,7 +99,7 @@ async function saveCompetitorIntel({ competitor, category, summary, sourceURL })
 
 async function getAllCompetitorIntel() {
   const records = await getBase()('CompetitorIntel')
-    .select({ filterByFormula: `{Status} = "active"` })
+    .select()
     .all();
   return records;
 }
