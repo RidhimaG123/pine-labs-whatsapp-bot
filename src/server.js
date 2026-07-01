@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const twilio = require('twilio');
 const { logMessage } = require('./airtable');
+const { handleMessage } = require('./merchant');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -20,9 +21,16 @@ app.post('/webhook', async (req, res) => {
     console.error('Airtable logging failed:', err.message);
   }
 
-  const twiml = new twilio.twiml.MessagingResponse();
-  twiml.message(`You said: ${Body}`);
+  let reply;
+  try {
+    reply = await handleMessage(From, Body);
+  } catch (err) {
+    console.error('Message handling failed:', err.message);
+    reply = 'Sorry, something went wrong. Please try again.';
+  }
 
+  const twiml = new twilio.twiml.MessagingResponse();
+  twiml.message(reply);
   res.type('text/xml').send(twiml.toString());
 });
 
