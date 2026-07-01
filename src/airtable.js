@@ -26,7 +26,7 @@ async function logMessage({ from, to, body }) {
 
 async function lookupMerchantByPhone(phone) {
   const records = await getBase()('Merchants')
-    .select({ filterByFormula: `{PhoneNumber} = "${phone}"`, maxRecords: 1 })
+    .select({ filterByFormula: `{Phone Number} = "${phone}"`, maxRecords: 1 })
     .firstPage();
   return records[0] || null;
 }
@@ -39,14 +39,14 @@ async function lookupMerchantByMerchantId(merchantId) {
 }
 
 async function linkPhoneToMerchant(recordId, phone) {
-  return getBase()('Merchants').update(recordId, { PhoneNumber: phone });
+  return getBase()('Merchants').update(recordId, { 'Phone Number': phone });
 }
 
 // Sessions table
 
 async function getSession(phone) {
   const records = await getBase()('Sessions')
-    .select({ filterByFormula: `{PhoneNumber} = "${phone}"`, maxRecords: 1 })
+    .select({ filterByFormula: `{Phone Number} = "${phone}"`, maxRecords: 1 })
     .firstPage();
   return records[0] || null;
 }
@@ -55,10 +55,10 @@ async function createSession(phone, topic) {
   const records = await getBase()('Sessions').create([
     {
       fields: {
-        PhoneNumber: phone,
-        CurrentTopic: topic,
-        LastActive: new Date().toISOString(),
-        EscalationFlag: false,
+        'Phone Number': phone,
+        'Current Topic': topic,
+        'Last Active': new Date().toISOString(),
+        'Escalation Flag': false,
         SessionID: randomUUID(),
       },
     },
@@ -69,7 +69,7 @@ async function createSession(phone, topic) {
 async function updateSession(recordId, fields) {
   return getBase()('Sessions').update(recordId, {
     ...fields,
-    LastActive: new Date().toISOString(),
+    'Last Active': new Date().toISOString(),
   });
 }
 
