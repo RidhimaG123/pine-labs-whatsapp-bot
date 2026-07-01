@@ -16,7 +16,6 @@ async function logMessage({ from, to, body }) {
         From: from,
         To: to,
         Body: body,
-        Timestamp: new Date().toISOString(),
       },
     },
   ]);
