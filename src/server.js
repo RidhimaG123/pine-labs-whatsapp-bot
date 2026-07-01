@@ -3,6 +3,7 @@ const express = require('express');
 const twilio = require('twilio');
 const { logMessage } = require('./airtable');
 const { handleMessage } = require('./merchant');
+const { refreshAllCompetitors } = require('./competitor');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -47,6 +48,14 @@ app.post('/webhook', async (req, res) => {
   res.type('text/xml').send(twiml.toString());
   console.log('[webhook] Step 3: Response sent');
   console.log('─'.repeat(60));
+});
+
+app.post('/admin/refresh-intel', async (req, res) => {
+  console.log('[admin] Manual competitor intel refresh triggered');
+  res.json({ status: 'started' });
+  refreshAllCompetitors().catch((err) =>
+    console.error('[admin] Refresh failed:', err.message)
+  );
 });
 
 app.listen(PORT, () => {

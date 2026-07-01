@@ -73,6 +73,38 @@ async function updateSession(recordId, fields) {
   });
 }
 
+// CompetitorIntel table
+
+async function saveCompetitorIntel({ competitor, category, summary, sourceURL }) {
+  const existing = await getBase()('CompetitorIntel')
+    .select({
+      filterByFormula: `AND({Competitor} = "${competitor}", {Category} = "${category}")`,
+      maxRecords: 1,
+    })
+    .firstPage();
+
+  const fields = {
+    Competitor: competitor,
+    Category: category,
+    Summary: summary,
+    SourceURL: sourceURL,
+    DateFetched: new Date().toISOString().split('T')[0],
+    Status: 'active',
+  };
+
+  if (existing[0]) {
+    return getBase()('CompetitorIntel').update(existing[0].id, fields);
+  }
+  return getBase()('CompetitorIntel').create([{ fields }]);
+}
+
+async function getAllCompetitorIntel() {
+  const records = await getBase()('CompetitorIntel')
+    .select({ filterByFormula: `{Status} = "active"` })
+    .all();
+  return records;
+}
+
 module.exports = {
   getBase,
   logMessage,
@@ -82,4 +114,6 @@ module.exports = {
   getSession,
   createSession,
   updateSession,
+  saveCompetitorIntel,
+  getAllCompetitorIntel,
 };
