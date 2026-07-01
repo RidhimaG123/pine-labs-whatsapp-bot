@@ -63,7 +63,7 @@ async function handleMessage(phone, text) {
         await updateSession(session.id, { 'Current Topic': 'main_menu' });
         const name = merchantRecord.fields.Name || 'there';
         console.log(`[merchant] Linked phone to merchant ${merchantRecord.id}, session updated to main_menu`);
-        return `Welcome, ${name}! You've been successfully registered. How can I help you today?`;
+        return `Hi ${name}! I'm Priya from Pine Labs Malaysia 😊 What type of business do you run?`;
       }
       return `I couldn't find a merchant with ID "${text.trim()}". Please check and try again.`;
     }
@@ -89,7 +89,8 @@ async function handleMessage(phone, text) {
 
   if (!session) {
     session = await createSession(phone, 'main_menu');
-    console.log(`[session] Created session ${session.id}`);
+    console.log(`[session] Created session ${session.id} — sending first-time greeting`);
+    return `Hi ${name}! I'm Priya from Pine Labs Malaysia 😊 What type of business do you run?`;
   }
 
   // Escalation check
