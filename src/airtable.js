@@ -1,14 +1,16 @@
 require('dotenv').config();
 const Airtable = require('airtable');
 
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  process.env.AIRTABLE_BASE_ID
-);
-
 const TABLE_NAME = 'MessageLogs';
 
+function getBase() {
+  return new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+    process.env.AIRTABLE_BASE_ID
+  );
+}
+
 async function logMessage({ from, to, body }) {
-  return base(TABLE_NAME).create([
+  return getBase()(TABLE_NAME).create([
     {
       fields: {
         From: from,
@@ -20,4 +22,4 @@ async function logMessage({ from, to, body }) {
   ]);
 }
 
-module.exports = { base, logMessage };
+module.exports = { getBase, logMessage };
