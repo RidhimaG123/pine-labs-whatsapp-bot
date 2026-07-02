@@ -5,8 +5,7 @@ const {
   updateSession,
 } = require('./airtable');
 const { getAIReply } = require('./openai');
-
-const ESCALATION_KEYWORDS = ['agent', 'help'];
+const { isHighIntent, captureLeadAndNotify } = require('./leads');
 
 async function handleMessage(phone, text) {
   console.log(`[handleMessage] phone=${phone} text="${text}"`);
@@ -48,13 +47,24 @@ async function handleMessage(phone, text) {
     return greeting;
   }
 
-  // Escalation check
-  const normalised = text.toLowerCase().trim();
-  if (ESCALATION_KEYWORDS.some((kw) => normalised.includes(kw))) {
-    console.log(`[escalation] Keyword detected — flagging session`);
-    await updateSession(session.id, { 'Current Topic': 'escalated', 'Escalation Flag': true });
-    const nameStr = name ? `, ${name}` : '';
-    return `I've flagged your conversation for a Pine Labs specialist${nameStr} — someone will be in touch shortly. Is there anything else I can help with in the meantime?`;
+  const topic = session.fields['Current Topic'];
+
+  // Awaiting name after high-intent trigger
+  if (topic === 'awaiting_name') {
+    const prospectName = text.trim();
+    console.log(`[leads] Name received: "${prospectName}" — capturing lead`);
+    await updateSession(session.id, { 'Current Topic': 'lead_captured' });
+    captureLeadAndNotify(phone, prospectName).catch((err) =>
+      console.error(`[leads] captureLeadAndNotify failed: ${err.message}`)
+    );
+    return `Thanks ${prospectName}! A Pine Labs specialist will be in touch with you very soon 😊 Is there anything else I can help with while you wait?`;
+  }
+
+  // High-intent detection
+  if (isHighIntent(text)) {
+    console.log(`[leads] High-intent detected — asking for name`);
+    await updateSession(session.id, { 'Current Topic': 'awaiting_name', 'Escalation Flag': true });
+    return `Great! I'll have one of our Pine Labs specialists reach out to you shortly 😊 Can I get your name so they know who to contact?`;
   }
 
   // AI reply

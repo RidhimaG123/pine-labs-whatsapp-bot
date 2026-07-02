@@ -104,6 +104,34 @@ async function getAllCompetitorIntel() {
   return records;
 }
 
+// MessageLogs table
+
+async function getMessagesByPhone(phone) {
+  const records = await getBase()('MessageLogs')
+    .select({ filterByFormula: `{From} = "${phone}"`, sort: [{ field: 'Created', direction: 'asc' }] })
+    .all();
+  return records;
+}
+
+// HotLeads table
+
+async function saveHotLead({ name, phone, businessType, outletCount, currentPOS, summary }) {
+  return getBase()('HotLeads').create([
+    {
+      fields: {
+        Name: name,
+        'Phone Number': phone,
+        'Business Type': businessType,
+        'Outlet Count': outletCount,
+        'Current POS': currentPOS,
+        'Conversation Summary': summary,
+        Status: 'New',
+        'Date Created': new Date().toISOString().split('T')[0],
+      },
+    },
+  ]);
+}
+
 module.exports = {
   getBase,
   logMessage,
@@ -114,5 +142,7 @@ module.exports = {
   createSession,
   updateSession,
   saveCompetitorIntel,
+  getMessagesByPhone,
+  saveHotLead,
   getAllCompetitorIntel,
 };

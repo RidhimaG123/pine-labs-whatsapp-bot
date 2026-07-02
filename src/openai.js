@@ -102,4 +102,26 @@ async function getAIReply(userMessage, merchantContext = {}) {
   return response.choices[0].message.content.trim();
 }
 
-module.exports = { getAIReply };
+async function generateLeadSummary(messages) {
+  const conversation = messages.length
+    ? messages.map((m) => `Merchant: ${m.fields.Body}`).join('\n')
+    : 'No conversation history available.';
+
+  const response = await getClient().chat.completions.create({
+    model: 'gpt-4o',
+    messages: [
+      {
+        role: 'system',
+        content:
+          'You are a sales intelligence assistant. From the merchant conversation below, extract: businessType (type of business), outletCount (number of outlets/locations), currentPOS (their current POS or payment terminal system). Then write a 2-sentence summary of the lead opportunity. Return valid JSON only: {"businessType":"...","outletCount":"...","currentPOS":"...","summary":"..."}. Use "Unknown" for any field not mentioned.',
+      },
+      { role: 'user', content: conversation },
+    ],
+    max_tokens: 200,
+    response_format: { type: 'json_object' },
+  });
+
+  return JSON.parse(response.choices[0].message.content);
+}
+
+module.exports = { getAIReply, generateLeadSummary };
