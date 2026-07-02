@@ -43,8 +43,8 @@ async function handleMessage(phone, text) {
       throw err;
     }
     const greeting = name
-      ? `Hi ${name}! I'm Priya from Pine Labs Malaysia 😊 What type of business do you run?`
-      : `Hi! I'm Priya from Pine Labs Malaysia 😊 What type of business do you run?`;
+      ? `Hi ${name}! I'm Priya, Pine Labs Malaysia's virtual assistant 🤖 I'm here to help you explore our payment solutions! What type of business do you run?`
+      : `Hi! I'm Priya, Pine Labs Malaysia's virtual assistant 🤖 I'm here to help you explore our payment solutions! What type of business do you run?`;
     return greeting;
   }
 
