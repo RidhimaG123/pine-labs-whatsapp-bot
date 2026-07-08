@@ -4,6 +4,7 @@ const twilio = require('twilio');
 const { logMessage } = require('./airtable');
 const { handleMessage } = require('./merchant');
 const { refreshAllCompetitors } = require('./competitor');
+const { handleSendTemplate, handleBroadcast, startScheduler } = require('./templates');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -58,6 +59,11 @@ app.post('/admin/refresh-intel', async (req, res) => {
   );
 });
 
+app.post('/admin/send-template', handleSendTemplate);
+
+app.post('/admin/broadcast', handleBroadcast);
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  startScheduler();
 });

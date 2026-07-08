@@ -53,7 +53,7 @@ async function handleMessage(phone, text) {
   if (topic === 'awaiting_name') {
     const prospectName = text.trim();
     console.log(`[leads] Name received: "${prospectName}" — capturing lead`);
-    await updateSession(session.id, { 'Current Topic': 'lead_captured' });
+    await updateSession(session.id, { 'Current Topic': 'lead_captured', Status: 'active' });
     captureLeadAndNotify(phone, prospectName).catch((err) =>
       console.error(`[leads] captureLeadAndNotify failed: ${err.message}`)
     );
@@ -63,7 +63,7 @@ async function handleMessage(phone, text) {
   // High-intent detection
   if (isHighIntent(text)) {
     console.log(`[leads] High-intent detected — asking for name`);
-    await updateSession(session.id, { 'Current Topic': 'awaiting_name', 'Escalation Flag': true });
+    await updateSession(session.id, { 'Current Topic': 'awaiting_name', 'Escalation Flag': true, Status: 'active' });
     return `Great! I'll have one of our Pine Labs specialists reach out to you shortly 😊 Can I get your name so they know who to contact?`;
   }
 
@@ -78,7 +78,7 @@ async function handleMessage(phone, text) {
     throw err;
   }
 
-  await updateSession(session.id, { 'Current Topic': 'main_menu' });
+  await updateSession(session.id, { 'Current Topic': 'main_menu', Status: 'active' });
   return reply;
 }
 

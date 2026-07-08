@@ -59,6 +59,7 @@ async function createSession(phone, topic) {
         'Current Topic': topic,
         'Last Active': new Date().toISOString(),
         'Escalation Flag': false,
+        Status: 'active',
         SessionID: randomUUID(),
       },
     },
@@ -71,6 +72,10 @@ async function updateSession(recordId, fields) {
     ...fields,
     'Last Active': new Date().toISOString(),
   });
+}
+
+async function getAllSessions() {
+  return getBase()('Sessions').select().all();
 }
 
 // CompetitorIntel table
@@ -132,6 +137,21 @@ async function saveHotLead({ name, phone, businessType, outletCount, currentPOS,
   ]);
 }
 
+// Templates table
+
+async function getTemplateByName(name) {
+  const records = await getBase()('Templates')
+    .select({ filterByFormula: `{Template Name} = "${name}"`, maxRecords: 1 })
+    .firstPage();
+  return records[0] || null;
+}
+
+async function touchTemplateLastUsed(recordId) {
+  return getBase()('Templates').update(recordId, {
+    'Last Used': new Date().toISOString(),
+  });
+}
+
 module.exports = {
   getBase,
   logMessage,
@@ -141,8 +161,11 @@ module.exports = {
   getSession,
   createSession,
   updateSession,
+  getAllSessions,
   saveCompetitorIntel,
   getMessagesByPhone,
   saveHotLead,
   getAllCompetitorIntel,
+  getTemplateByName,
+  touchTemplateLastUsed,
 };
