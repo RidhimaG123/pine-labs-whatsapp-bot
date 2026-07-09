@@ -5,6 +5,15 @@ const { logMessage } = require('./airtable');
 const { handleMessage } = require('./merchant');
 const { refreshAllCompetitors } = require('./competitor');
 const { handleSendTemplate, handleBroadcast, startScheduler } = require('./templates');
+const {
+  requireAdminPage,
+  requireAdminApi,
+  handleLoginPage,
+  handleLogin,
+  handleDashboardPage,
+  handleDashboardData,
+  handleSuppressIntel,
+} = require('./dashboard');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -51,7 +60,14 @@ app.post('/webhook', async (req, res) => {
   console.log('─'.repeat(60));
 });
 
-app.post('/admin/refresh-intel', async (req, res) => {
+app.get('/admin/login', handleLoginPage);
+app.post('/admin/login', handleLogin);
+
+app.get('/admin', requireAdminPage, handleDashboardPage);
+app.get('/admin/data', requireAdminApi, handleDashboardData);
+app.post('/admin/suppress-intel', requireAdminApi, handleSuppressIntel);
+
+app.post('/admin/refresh-intel', requireAdminApi, async (req, res) => {
   console.log('[admin] Manual competitor intel refresh triggered');
   res.json({ status: 'started' });
   refreshAllCompetitors().catch((err) =>
@@ -59,9 +75,9 @@ app.post('/admin/refresh-intel', async (req, res) => {
   );
 });
 
-app.post('/admin/send-template', handleSendTemplate);
+app.post('/admin/send-template', requireAdminApi, handleSendTemplate);
 
-app.post('/admin/broadcast', handleBroadcast);
+app.post('/admin/broadcast', requireAdminApi, handleBroadcast);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

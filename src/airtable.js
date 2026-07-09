@@ -109,13 +109,23 @@ async function getAllCompetitorIntel() {
   return records;
 }
 
+async function suppressCompetitorIntel(recordId) {
+  return getBase()('CompetitorIntel').update(recordId, { Suppressed: true });
+}
+
 // MessageLogs table
 
 async function getMessagesByPhone(phone) {
   const records = await getBase()('MessageLogs')
-    .select({ filterByFormula: `{From} = "${phone}"`, sort: [{ field: 'Created', direction: 'asc' }] })
+    .select({ filterByFormula: `{From} = "${phone}"` })
     .all();
-  return records;
+  return records.sort(
+    (a, b) => new Date(a._rawJson.createdTime) - new Date(b._rawJson.createdTime)
+  );
+}
+
+async function getAllMessageLogs() {
+  return getBase()('MessageLogs').select().all();
 }
 
 // HotLeads table
@@ -152,6 +162,10 @@ async function touchTemplateLastUsed(recordId) {
   });
 }
 
+async function getAllHotLeads() {
+  return getBase()('HotLeads').select().all();
+}
+
 module.exports = {
   getBase,
   logMessage,
@@ -164,8 +178,11 @@ module.exports = {
   getAllSessions,
   saveCompetitorIntel,
   getMessagesByPhone,
+  getAllMessageLogs,
   saveHotLead,
+  getAllHotLeads,
   getAllCompetitorIntel,
+  suppressCompetitorIntel,
   getTemplateByName,
   touchTemplateLastUsed,
 };
