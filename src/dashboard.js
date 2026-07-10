@@ -267,12 +267,12 @@ function renderLoginPage(errorMsg) {
 <title>Pine Labs Malaysia — Admin Login</title>
 <style>
   body { font-family: -apple-system, Helvetica, Arial, sans-serif; background: #f5f5f5; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-  .card { background: #fff; padding: 2.5rem; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); width: 320px; border-top: 4px solid #E31837; }
-  h1 { font-size: 1.1rem; color: #E31837; margin: 0 0 1.5rem; }
+  .card { background: #fff; padding: 2.5rem; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); width: 320px; border-top: 4px solid #097969; }
+  h1 { font-size: 1.1rem; color: #097969; margin: 0 0 1.5rem; }
   input { width: 100%; padding: 0.6rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-  button { width: 100%; padding: 0.6rem; background: #E31837; color: #fff; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; }
-  button:hover { background: #b91329; }
-  .error { color: #E31837; font-size: 0.85rem; margin: -0.5rem 0 1rem; }
+  button { width: 100%; padding: 0.6rem; background: #097969; color: #fff; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; }
+  button:hover { background: #075c50; }
+  .error { color: #097969; font-size: 0.85rem; margin: -0.5rem 0 1rem; }
 </style>
 </head>
 <body>
@@ -296,20 +296,20 @@ function renderDashboardPage() {
 <title>Pine Labs Malaysia — Admin Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  :root { --red: #E31837; }
+  :root { --green: #097969; }
   * { box-sizing: border-box; }
   body { font-family: -apple-system, Helvetica, Arial, sans-serif; background: #f5f5f5; margin: 0; color: #222; }
-  header { background: var(--red); color: #fff; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+  header { background: var(--green); color: #fff; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 1.25rem; margin: 0; }
-  header button { background: #fff; color: var(--red); border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 600; cursor: pointer; }
+  header button { background: #fff; color: var(--green); border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 600; cursor: pointer; }
   header .header-actions { display: flex; gap: 0.75rem; align-items: center; }
   header a.logout-link { color: #fff; font-size: 0.85rem; text-decoration: underline; }
   main { padding: 1.5rem 2rem 3rem; }
   section { margin-bottom: 2rem; }
-  section h2 { font-size: 1rem; color: var(--red); border-bottom: 2px solid var(--red); padding-bottom: 0.4rem; margin-bottom: 1rem; }
+  section h2 { font-size: 1rem; color: var(--green); border-bottom: 2px solid var(--green); padding-bottom: 0.4rem; margin-bottom: 1rem; }
   .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-  .stat-card { background: #fff; border-radius: 8px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px solid var(--red); }
-  .stat-card .value { font-size: 1.8rem; font-weight: 700; color: var(--red); }
+  .stat-card { background: #fff; border-radius: 8px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px solid var(--green); }
+  .stat-card .value { font-size: 1.8rem; font-weight: 700; color: var(--green); }
   .stat-card .label { font-size: 0.8rem; color: #666; margin-top: 0.25rem; }
   .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1rem; }
   .chart-card { background: #fff; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
@@ -317,12 +317,12 @@ function renderDashboardPage() {
   .chart-card canvas { max-height: 260px; }
   table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
   th, td { text-align: left; padding: 0.6rem 0.8rem; font-size: 0.85rem; border-bottom: 1px solid #eee; }
-  th { background: var(--red); color: #fff; font-weight: 600; }
+  th { background: var(--green); color: #fff; font-weight: 600; }
   tr:last-child td { border-bottom: none; }
   tr.highlight { background: #fff9c4; }
   .table-wrap { overflow-x: auto; }
-  .suppress-btn { background: var(--red); color: #fff; border: none; padding: 0.3rem 0.7rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; }
-  .suppress-btn:hover { background: #b91329; }
+  .suppress-btn { background: var(--green); color: #fff; border: none; padding: 0.3rem 0.7rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; }
+  .suppress-btn:hover { background: #075c50; }
   .empty { color: #999; font-style: italic; padding: 1rem; text-align: center; }
 </style>
 </head>
@@ -399,8 +399,8 @@ function renderDashboardPage() {
 </main>
 
 <script>
-  const RED = '#E31837';
-  const PALETTE = ['#E31837', '#666666', '#F2A900', '#2E7D32', '#1565C0', '#8E24AA'];
+  const GREEN = '#097969';
+  const PALETTE = ['#097969', '#666666', '#F2A900', '#2E7D32', '#1565C0', '#8E24AA'];
   let charts = {};
 
   function esc(str) {
@@ -433,7 +433,7 @@ function renderDashboardPage() {
       type: 'line',
       data: {
         labels: chartData.newConversations.labels,
-        datasets: [{ label: 'New conversations', data: chartData.newConversations.data, borderColor: RED, backgroundColor: 'rgba(227,24,55,0.15)', tension: 0.3, fill: true }],
+        datasets: [{ label: 'New conversations', data: chartData.newConversations.data, borderColor: GREEN, backgroundColor: 'rgba(9,121,105,0.15)', tension: 0.3, fill: true }],
       },
       options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } },
     });
@@ -442,7 +442,7 @@ function renderDashboardPage() {
       type: 'bar',
       data: {
         labels: chartData.messagesPerConversation.labels,
-        datasets: [{ label: 'Messages', data: chartData.messagesPerConversation.data, backgroundColor: RED }],
+        datasets: [{ label: 'Messages', data: chartData.messagesPerConversation.data, backgroundColor: GREEN }],
       },
       options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } },
     });
