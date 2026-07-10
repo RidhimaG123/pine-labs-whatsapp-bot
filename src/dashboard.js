@@ -41,6 +41,13 @@ function requireAdminApi(req, res, next) {
   res.status(401).json({ error: 'Not authenticated' });
 }
 
+function handleLogout(req, res) {
+  const token = parseCookies(req).admin_token;
+  if (token) validTokens.delete(token);
+  res.setHeader('Set-Cookie', 'admin_token=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0');
+  res.redirect('/admin/login');
+}
+
 function handleLoginPage(req, res) {
   res.type('html').send(renderLoginPage());
 }
@@ -48,6 +55,7 @@ function handleLoginPage(req, res) {
 function handleLogin(req, res) {
   const { password } = req.body;
   const adminPassword = process.env.ADMIN_PASSWORD;
+  console.log(`[dashboard] ADMIN_PASSWORD loaded: ${!!adminPassword} (length: ${adminPassword ? adminPassword.length : 0})`);
   if (adminPassword && password === adminPassword) {
     const token = crypto.randomUUID();
     validTokens.add(token);
@@ -294,6 +302,8 @@ function renderDashboardPage() {
   header { background: var(--red); color: #fff; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; }
   header h1 { font-size: 1.25rem; margin: 0; }
   header button { background: #fff; color: var(--red); border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 600; cursor: pointer; }
+  header .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+  header a.logout-link { color: #fff; font-size: 0.85rem; text-decoration: underline; }
   main { padding: 1.5rem 2rem 3rem; }
   section { margin-bottom: 2rem; }
   section h2 { font-size: 1rem; color: var(--red); border-bottom: 2px solid var(--red); padding-bottom: 0.4rem; margin-bottom: 1rem; }
@@ -319,7 +329,10 @@ function renderDashboardPage() {
 <body>
 <header>
   <h1>Pine Labs Malaysia — Admin Dashboard</h1>
-  <button id="refresh-intel-btn">Refresh Competitor Intel</button>
+  <div class="header-actions">
+    <button id="refresh-intel-btn">Refresh Competitor Intel</button>
+    <a class="logout-link" href="/admin/logout">Logout</a>
+  </div>
 </header>
 <main>
 
@@ -518,6 +531,7 @@ module.exports = {
   requireAdminApi,
   handleLoginPage,
   handleLogin,
+  handleLogout,
   handleDashboardPage,
   handleDashboardData,
   handleSuppressIntel,

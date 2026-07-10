@@ -10,6 +10,7 @@ const {
   requireAdminApi,
   handleLoginPage,
   handleLogin,
+  handleLogout,
   handleDashboardPage,
   handleDashboardData,
   handleSuppressIntel,
@@ -62,6 +63,7 @@ app.post('/webhook', async (req, res) => {
 
 app.get('/admin/login', handleLoginPage);
 app.post('/admin/login', handleLogin);
+app.get('/admin/logout', handleLogout);
 
 app.get('/admin', requireAdminPage, handleDashboardPage);
 app.get('/admin/data', requireAdminApi, handleDashboardData);
